@@ -24,7 +24,7 @@ gap_old:
 run:
 	cat data/c05100 | ./gap timelim 300
 run_old:
-	cat data/c05100 | ./gap_2 timelim 300
+	cat data/c05100 | ./gap_old timelim 300
 
 check_old:
 	cat data/c05100 data/sol_c05100-1931 | ./gap_old givesol 1

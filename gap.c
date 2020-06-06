@@ -254,8 +254,8 @@ for(int i=0;i<gapdata.n;i++){
       Note that you should write "vdata->bestsol[j]" in your subroutines.
     */
     //int maxagent[gapdata.m];
-    int tempmaxagent[gapdata.m];
-    int risousu[gapdata.m][gapdata.n];
+    int temp_max_agent[gapdata.m];
+    int resource[gapdata.m][gapdata.n];
     int kosuto[gapdata.m][gapdata.n];
     int narabikaeindex[gapdata.n];
     for (int i = 0; i < gapdata.n; i++) {
@@ -263,7 +263,7 @@ for(int i=0;i<gapdata.n;i++){
     }
     for (int i = 0; i < gapdata.n; i++) {
         for (int j = 0; j < gapdata.m; j++) {
-            risousu[j][i] = gapdata.a[j][i];//resource requirement of each pair
+            resource[j][i] = gapdata.a[j][i];//resource requirement of each pair
             kosuto[j][i] = gapdata.c[j][i];// cost of each pair
         }
     }
@@ -278,7 +278,7 @@ for(int i=0;i<gapdata.n;i++){
     int dassyutu = 0;
     while ((double) cpu_time() - vdata.starttime < param.timelim) {
         for (int i = 0; i < gapdata.m; i++) {
-            tempmaxagent[i] = gapdata.b[i];//resource size at agent at that time
+            temp_max_agent[i] = gapdata.b[i];//resource size at agent at that time
         }
 //seed=seed+10;
         tempcost = 0;
@@ -296,7 +296,7 @@ for(int i=0;i<gapdata.n;i++){
         for (int i = 0; i < gapdata.n; i++) {
             dassyutu = 0;
             for (int j = 0; j < gapdata.m; j++) {
-                kaku[j] = risousu[j][narabikaeindex[i]];
+                kaku[j] = resource[j][narabikaeindex[i]];
             }
             while (1) {
                 minco = 99999;
@@ -311,9 +311,9 @@ for(int i=0;i<gapdata.n;i++){
                     //if(i>85){printf(" %d", i);} debug
                     break;
                 }
-                if (risousu[mindex][narabikaeindex[i]] <= tempmaxagent[mindex]) {
+                if (resource[mindex][narabikaeindex[i]] <= temp_max_agent[mindex]) {
                     tempcost = tempcost + kosuto[mindex][narabikaeindex[i]];
-                    tempmaxagent[mindex] = tempmaxagent[mindex] - risousu[mindex][narabikaeindex[i]];
+                    temp_max_agent[mindex] = temp_max_agent[mindex] - resource[mindex][narabikaeindex[i]];
                     minco = 99999;
                     tempjob[narabikaeindex[i]] = mindex;
                     kaisuu++;
