@@ -256,25 +256,25 @@ for(int i=0;i<gapdata.n;i++){
     //int maxagent[gapdata.m];
     int temp_max_agent[gapdata.m];
     int resource[gapdata.m][gapdata.n];
-    int kosuto[gapdata.m][gapdata.n];
-    int narabikaeindex[gapdata.n];
+    int cost[gapdata.m][gapdata.n];
+    int sorting_index[gapdata.n];
     for (int i = 0; i < gapdata.n; i++) {
-        narabikaeindex[i] = i;//index number for randomize
+        sorting_index[i] = i;//index number for randomize
     }
     for (int i = 0; i < gapdata.n; i++) {
         for (int j = 0; j < gapdata.m; j++) {
             resource[j][i] = gapdata.a[j][i];//resource requirement of each pair
-            kosuto[j][i] = gapdata.c[j][i];// cost of each pair
+            cost[j][i] = gapdata.c[j][i];// cost of each pair
         }
     }
     /*for (int i=0;i<gapdata.m;i++){
       maxagent[i] = gapdata.b[i];//resource size at agent
     }*/
-    int kaku[gapdata.m];//each cost(fixing job and focusing agent number)
+    int each_job_cost[gapdata.m];//each cost(fixing job and focusing agent number)
     int kaisuu = 0;
     int akaisuu = 0;
 //starting roop　i/n=job　j/m=agent
-    int tempjob[gapdata.n];//temporary allocation
+    int temp_job[gapdata.n];//temporary allocation
     int dassyutu = 0;
     while ((double) cpu_time() - vdata.starttime < param.timelim) {
         for (int i = 0; i < gapdata.m; i++) {
@@ -289,20 +289,20 @@ for(int i=0;i<gapdata.n;i++){
         int mindex = -1;//minimum index number
         for (int i = 0; i < gapdata.n; i++) {
             int k = rand() % gapdata.n;
-            int t = narabikaeindex[i];
-            narabikaeindex[i] = narabikaeindex[k];
-            narabikaeindex[k] = t;
+            int t = sorting_index[i];
+            sorting_index[i] = sorting_index[k];
+            sorting_index[k] = t;
         }//randomize function debug pass
         for (int i = 0; i < gapdata.n; i++) {
             dassyutu = 0;
             for (int j = 0; j < gapdata.m; j++) {
-                kaku[j] = resource[j][narabikaeindex[i]];
+                each_job_cost[j] = resource[j][sorting_index[i]];
             }
             while (1) {
                 minco = 99999;
                 for (int j = 0; j < gapdata.m; j++) {
-                    if (kaku[j] <= minco) {
-                        minco = kaku[j];
+                    if (each_job_cost[j] <= minco) {
+                        minco = each_job_cost[j];
                         mindex = j;
                     }
                 }
@@ -311,43 +311,43 @@ for(int i=0;i<gapdata.n;i++){
                     //if(i>85){printf(" %d", i);} debug
                     break;
                 }
-                if (resource[mindex][narabikaeindex[i]] <= temp_max_agent[mindex]) {
-                    tempcost = tempcost + kosuto[mindex][narabikaeindex[i]];
-                    temp_max_agent[mindex] = temp_max_agent[mindex] - resource[mindex][narabikaeindex[i]];
+                if (resource[mindex][sorting_index[i]] <= temp_max_agent[mindex]) {
+                    tempcost = tempcost + cost[mindex][sorting_index[i]];
+                    temp_max_agent[mindex] = temp_max_agent[mindex] - resource[mindex][sorting_index[i]];
                     minco = 99999;
-                    tempjob[narabikaeindex[i]] = mindex;
+                    temp_job[sorting_index[i]] = mindex;
                     kaisuu++;
                     break;
                 } else {
-                    kaku[mindex] = 99999;
+                    each_job_cost[mindex] = 99999;
                 }
 
             }//mini while
             if (dassyutu == 1) {
                 break;
             }
-//if(dassyutu!=1){if(cost<=tempcost)cost=tempcost;}//位置が違いそう　仮置き
+        //if(dassyutu!=1){if(cost<=tempcost)cost=tempcost;}//位置が違いそう　仮置き
         }  //for
         akaisuu++;
         if (dassyutu == 0) {
             if (mincost > tempcost) {
                 mincost = tempcost;
                 for (int i = 0; i < gapdata.n; i++) {
-                    vdata.bestsol[i] = tempjob[i];//ここが怪しい 別に保存して抜けてからbestsolに入れる？
+                    vdata.bestsol[i] = temp_job[i];//ここが怪しい 別に保存して抜けてからbestsolに入れる？
                 }
             }
         }
-//if((cpu_time() - vdata->starttime) > param->timelim){break;}//あってる？
+    //if((cpu_time() - vdata->starttime) > param->timelim){break;}//あってる？
     }//start while
 
     vdata.endtime = cpu_time();
     recompute_cost(&vdata, &gapdata);
     free_memory(&vdata, &gapdata);
-    printf(" %d", tempjob[6]);
-    printf(" %d", tempjob[7]);
-    printf(" %d", narabikaeindex[5]);
-    printf(" %d", narabikaeindex[6]);
-    printf(" %d", narabikaeindex[7]);
+    printf(" %d", temp_job[6]);
+    printf(" %d", temp_job[7]);
+    printf(" %d", sorting_index[5]);
+    printf(" %d", sorting_index[6]);
+    printf(" %d", sorting_index[7]);
     printf(" %d", kaisuu);
     printf(" %d", akaisuu);
     return EXIT_SUCCESS;
