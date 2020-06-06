@@ -19,11 +19,16 @@ $(TARGET).o: $(TARGET).c cpu_time.c
 	$(CC) $(CFLAGS) -c $(TARGET).c
 
 gap:
+gap_old:
 
 run:
 	cat data/c05100 | ./gap timelim 300
-check:
-#	cat data/c05100 data/sol_c05100-1931 | ./gap givesol 1
-	cat data/c05100 data/sol_c05100-infeas | ./gap givesol 1
+run_old:
+	cat data/c05100 | ./gap_2 timelim 300
+
+check_old:
+	cat data/c05100 data/sol_c05100-1931 | ./gap_old givesol 1
+	cat data/c05100 data/sol_c05100-infeas | ./gap_old givesol 1
+
 clean:
 	rm *.o

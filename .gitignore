@@ -1,4 +1,5 @@
 *.o
 data/*
 gap
+gap_old
 .idea
