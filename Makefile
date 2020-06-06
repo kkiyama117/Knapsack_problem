@@ -23,6 +23,10 @@ gap_old:
 
 run:
 	cat data/c05100 | ./gap timelim 300
+
+run2:
+	cat data/d05200 | ./gap timelim 300
+
 run_old:
 	cat data/c05100 | ./gap_old timelim 300
 
