@@ -20,6 +20,7 @@ $(TARGET).o: $(TARGET).c cpu_time.c
 
 gap:
 gap_old:
+gap_a:
 
 run:
 	cat data/c05100 | ./gap timelim 300
