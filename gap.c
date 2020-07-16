@@ -271,7 +271,8 @@ for(int i=0;i<gapdata.n;i++){
       maxagent[i] = gapdata.b[i];//resource size at agent
     }*/
     int each_job_cost[gapdata.m];//each cost(fixing job and focusing agent number)
-    int kaisuu = 0;
+    int t
+    kaisuu = 0;
     int akaisuu = 0;
 //starting roop　i/n=job　j/m=agent
     int temp_job[gapdata.n];//temporary allocation
