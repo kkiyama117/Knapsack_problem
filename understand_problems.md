@@ -34,13 +34,14 @@ instanceの読み込みと, 解法のコストの計算も含む.
 - `timelim`と`recomputed_cost()` は勝手に変えるな
 - timelimitを超えたらとめるべき
   - 例: 
-  ```c
+    ```c
       if((cpu_time() - vdata->starttime) > param->timelim){break;}
-  ```
+    ```
   - ただしMain-loopを抜けるのにTIMELIMを使ってはいけない.
-  ```c
+    ```c
       if((cpu_time() - vdata->starttime) > TIMELIM){break;}
-  ```
+    ```
+    
 - `cpu_time()` を頻繁に呼ばない. 
   - 多少超えてもいいが, 1minでペナルティが出る
 
@@ -61,10 +62,12 @@ instanceの読み込みと, 解法のコストの計算も含む.
     cat data/c05100 data/sol_c05100-1931 | ./gap givesol 1
     cat data/c05100 data/sol_c05100-infeas | ./gap givesol 1
   ```
+  
 - 実行する場合
   ```shell script
     cat data/c05100 | ./gap timelim 300
   ```
+
 - `c`, `d`, `e` ではじまるファイルが instance,
 `sol` ではじまるファイルが実現可能or不可能な解
 - もし 実現不可能な解の場合, 以下の出力になる
@@ -75,9 +78,15 @@ instanceの読み込みと, 解法のコストの計算も含む.
     time for the search:          0.00 seconds
     time to read the instance:    0.00 seconds
   ```
+  
   - 1行目が再評価コスト
   - 2行目が Infeasableかどうか
   - 3行目が 各Agentの残りの余剰リソースを表す(負の場合超過を表す)
   - 4行目が アルゴリズムのみの実行時間を表す
   - 5行目が ファイルの読み込みの時間を表す
 - 実現可能な場合, 2,3行目は出力されない
+  ```
+    recomputed cost = 1935
+    time for the search:          ?.?? seconds
+    time to read the instance:    0.00 seconds
+  ```

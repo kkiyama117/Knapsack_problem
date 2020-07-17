@@ -8,10 +8,15 @@
 
 ## 使い方
 もし `make` が使えるなら
-```
-make gap
+```shell script
+# compile
+make
+# run compiled binary
 make run
 ```
+
+## 問題の説明と解法
+See [[understand_problems.md]]
 
 ## pass
 optTokuron
