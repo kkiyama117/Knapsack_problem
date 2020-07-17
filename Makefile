@@ -22,23 +22,18 @@ gap:
 gap_old:
 gap_a:
 
-run:
+run: gap
 	cat data/c05100 | ./gap timelim 300
 
-run2:
+run2: gap
 	cat data/d05200 | ./gap timelim 300
 
-run_a:
-	cat data/c05100 | ./gap timelim 300
-
-run_a2:
-	cat data/d05200 | ./gap timelim 300
-
-run_old:
+run_old: gap_old
 	cat data/c05100 | ./gap_old timelim 300
 
-check_old:
+check_old: gap_old
 	cat data/c05100 data/sol_c05100-1931 | ./gap_old givesol 1
+check_old_infeas: gap_old
 	cat data/c05100 data/sol_c05100-infeas | ./gap_old givesol 1
 
 clean:
