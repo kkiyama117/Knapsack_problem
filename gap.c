@@ -272,7 +272,16 @@ int main(int argc, char *argv[]) {
       vdata.bestsol[3] = 0.
       Note that you should write "vdata->bestsol[j]" in your subroutines.
     */
-    printf("DEBUG %d\n", gapdata.n);
+    // DEBUG
+    printf("Agent count %d\n", gapdata.m);
+    for (int i = 0; i < gapdata.m; ++i) {
+        for (int j = 0; j < gapdata.n ; ++j) {
+            printf("job%d -> cost: %d, resource: %d\n", gapdata.n, gapdata.c[i][j], gapdata.a[i][j] );
+        }
+    }
+    for (int j = 0; j < gapdata.n ; ++j) {
+        printf("hoge-%d\n", vdata.bestsol[j]);
+    }
 
     // CODES BELOW SHOULD'T CHANGE BECAUSE OF ONLY DELETING DATA AND MEMORY OF VARIABLES.
     // stop timer.

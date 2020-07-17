@@ -4,11 +4,11 @@ GAPの解決をする.
 instanceの読み込みと, 解法のコストの計算も含む.
 
 ### Domain
-- Job(count is `n`)
-  - index(`int`, `0...n-1`)
+- Job(count is `m`)
+  - j(`int`, `0...m-1`) - index of Job
   
-- Agent(count is `m`)
-  - index(`int`, `0...m-1`)
+- Agent(count is `n`)
+  - index(`int`, `0...n-1`) - index of Agent
 
 #### Warning and help
 - SolutionのFileではIndexがそれぞれ `1...m`, `1...n` になってるので注意

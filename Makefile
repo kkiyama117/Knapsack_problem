@@ -33,6 +33,7 @@ run_old: gap_old
 
 check_old: gap_old
 	cat data/c05100 data/sol_c05100-1931 | ./gap_old givesol 1
+
 check_old_infeas: gap_old
 	cat data/c05100 data/sol_c05100-infeas | ./gap_old givesol 1
 
