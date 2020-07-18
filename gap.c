@@ -285,9 +285,6 @@ int main(int argc, char *argv[]) {
       Note that you should write "vdata->bestsol[j]" in your subroutines.
     */
     // Case1. Kuso zako Greedy algorithm
-    /**
-     * For each job, get agent number instance having min cost and not Exceeding capacity.
-     */
 
     // 0. prepare val.
     // best solution at some point.
@@ -317,14 +314,11 @@ int main(int argc, char *argv[]) {
         // 1-2. get first solution.
         for (int i = 0; i < gapdata.m; i++) {
             agent_index = sorted_agent_list_by_resource[i];
-            printf("job %d is assigned to %d(resource is %d)\n", j, agent_index, gapdata.a[agent_index][j]);
             // check resources and set bestsol
             if (gapdata.a[agent_index][j] <= remain_resources_of_agent[agent_index]) {
                 sol[j] = agent_index;
                 // Cut back remained_resources of this agent.
-                remain_resources_of_agent[agent_index] =
-                        remain_resources_of_agent[agent_index] - gapdata.a[agent_index][j];
-                printf("agent %d remains %d resources\n", agent_index, remain_resources_of_agent[agent_index]);
+                remain_resources_of_agent[agent_index] -= gapdata.a[agent_index][j];
                 break;
             }
         }
@@ -333,27 +327,12 @@ int main(int argc, char *argv[]) {
     // 2. find better solution
     // TODO: divide functions and use better sort and algorithm(need to use malloc and copy)
     // TODO: better solution (now, default value of bestsol is 0 and
+    // There are some ways to solve it.
+    // - Genetic algorithm
+    // -
     for (int k = 0; k < gapdata.n; k++) {
         vdata.bestsol[k] = sol[k];
     }
-
-//    for (int j = 0; j < gapdata.n; ++j) {
-    // Initialize sorted index list ->(first, use index of agents)
-//        for (int i = 0; i < gapdata.m; ++i) { sorted_agent_index_list[i] = i; }
-//        for (int i = 0; i < gapdata.m; ++i) { evaluation_list[i] = gapdata.c[i][j] / gapdata.a[i][j]; }
-
-    // 2. find sol if available
-//        for (int i = 0; i < gapdata.m; ++i) {
-//            int agent_index = sorted_agent_index_list[i];
-//             check resources and set bestsol
-//            if (gapdata.a[agent_index][j] <= remain_resources_of_agent[agent_index]) {
-//                vdata.bestsol[j] = agent_index;
-    // Cut back remained_resources of this agent.
-//                remain_resources_of_agent[agent_index] -= gapdata.a[agent_index][j];
-//                break;
-//            }
-//        }
-//    }
 
     // CODES BELOW SHOULD'T CHANGE BECAUSE OF ONLY DELETING DATA AND MEMORY OF VARIABLES.
     // stop timer.

@@ -90,3 +90,7 @@ instanceの読み込みと, 解法のコストの計算も含む.
     time for the search:          ?.?? seconds
     time to read the instance:    0.00 seconds
   ```
+  
+ ## solve
+ 後期で全データに対して実行可能解を出す事を考えて、まず実行可能解を最低一つ出す事にした.
+ その後、Swapをして最適解に近づける.
