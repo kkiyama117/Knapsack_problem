@@ -290,40 +290,70 @@ int main(int argc, char *argv[]) {
      */
 
     // 0. prepare val.
-    // List of remaining resources of each agent
+    // best solution at some point.
     int remain_resources_of_agent[gapdata.m];
-    // List of index of agent sorted by cost (Reset by each job loop)
-    int sorted_agent_index_list[gapdata.m];
-    // set default value
+    int sol[gapdata.n];
+    for (int j = 0; j < gapdata.n; j++) { sol[j] = 0; }
+
+    // 1. create feasible solution
     // remaining resources -> same as gapdata.b
-    for (int i = 0; i < gapdata.m; ++i) { remain_resources_of_agent[i] = gapdata.b[i]; }
+    // 1-0. Initialize variables
+    for (int i = 0; i < gapdata.m; i++) { remain_resources_of_agent[i] = gapdata.b[i]; }
+    for (int j = 0; j < gapdata.n; j++) {
+        int sorted_agent_list_by_resource[gapdata.m];
+        for (int i = 0; i < gapdata.m; i++) { sorted_agent_list_by_resource[i] = i; }
 
-    // TODO: divide functions and use better sort and algorithm(need to use malloc and copy)
-    for (int j = 0; j < gapdata.n; ++j) {
-        // Initialize sorted index list ->(first, use index of agents)
-        for (int i = 0; i < gapdata.m; ++i) { sorted_agent_index_list[i] = i; }
-
-        // 1. sort agent_index_list by bubble sort
+        // 1-1. sort agent_index_list by bubble sort with resources
         int min_agent_index = 0;
-        for (int i = 0; i < gapdata.m; ++i) {
-            if (gapdata.c[i][j] < gapdata.c[min_agent_index][j]) {
-                swap(&sorted_agent_index_list[i], &sorted_agent_index_list[min_agent_index]);
+        for (int i = 0; i < gapdata.m; i++) {
+            // evaluate by amount of resource
+            if (gapdata.a[i][j] < gapdata.a[min_agent_index][j]) {
+                swap(&sorted_agent_list_by_resource[i], &sorted_agent_list_by_resource[min_agent_index]);
                 min_agent_index = i;
             }
         }
 
-        // 2. find bestsol if available
-        for (int i = 0; i < gapdata.m; ++i) {
-            int agent_index = sorted_agent_index_list[i];
+        int agent_index;
+        // 1-2. get first solution.
+        for (int i = 0; i < gapdata.m; i++) {
+            agent_index = sorted_agent_list_by_resource[i];
+            printf("job %d is assigned to %d(resource is %d)\n", j, agent_index, gapdata.a[agent_index][j]);
             // check resources and set bestsol
             if (gapdata.a[agent_index][j] <= remain_resources_of_agent[agent_index]) {
-                vdata.bestsol[j] = agent_index;
+                sol[j] = agent_index;
                 // Cut back remained_resources of this agent.
-                remain_resources_of_agent[agent_index] -= gapdata.a[agent_index][j];
+                remain_resources_of_agent[agent_index] =
+                        remain_resources_of_agent[agent_index] - gapdata.a[agent_index][j];
+                printf("agent %d remains %d resources\n", agent_index, remain_resources_of_agent[agent_index]);
                 break;
             }
         }
     }
+
+    // 2. find better solution
+    // TODO: divide functions and use better sort and algorithm(need to use malloc and copy)
+    // TODO: better solution (now, default value of bestsol is 0 and
+    for (int k = 0; k < gapdata.n; k++) {
+        vdata.bestsol[k] = sol[k];
+    }
+
+//    for (int j = 0; j < gapdata.n; ++j) {
+    // Initialize sorted index list ->(first, use index of agents)
+//        for (int i = 0; i < gapdata.m; ++i) { sorted_agent_index_list[i] = i; }
+//        for (int i = 0; i < gapdata.m; ++i) { evaluation_list[i] = gapdata.c[i][j] / gapdata.a[i][j]; }
+
+    // 2. find sol if available
+//        for (int i = 0; i < gapdata.m; ++i) {
+//            int agent_index = sorted_agent_index_list[i];
+//             check resources and set bestsol
+//            if (gapdata.a[agent_index][j] <= remain_resources_of_agent[agent_index]) {
+//                vdata.bestsol[j] = agent_index;
+    // Cut back remained_resources of this agent.
+//                remain_resources_of_agent[agent_index] -= gapdata.a[agent_index][j];
+//                break;
+//            }
+//        }
+//    }
 
     // CODES BELOW SHOULD'T CHANGE BECAUSE OF ONLY DELETING DATA AND MEMORY OF VARIABLES.
     // stop timer.
