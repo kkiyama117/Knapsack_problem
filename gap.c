@@ -71,6 +71,10 @@ void recompute_cost(Vdata *vdata, GAPdata *gapdata);
 
 void *malloc_e(size_t size);
 
+void swap(int *x, int *y);
+
+// My functions
+
 /***** check the feasibility and recompute the cost **************************/
 /***** NEVER MODIFY THIS SUBROUTINE! *****************************************/
 /**
@@ -229,6 +233,14 @@ void *malloc_e(size_t size) {
     return s;
 }
 
+//my functions
+void swap(int *x, int *y) {
+    int temp;
+    temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
 /***** main ******************************************************************/
 int main(int argc, char *argv[]) {
     // definition of variables
@@ -265,22 +277,52 @@ int main(int argc, char *argv[]) {
       (the value should be given as values from [0, m-1]) to which j is
       assigned. For example, if n=4 and m=3, and jobs 0, 1, 2 and 3 are
       assigned to agents 1, 0, 2 and 0, respectively, then vdata.bestsol
-      should be as follows:
+      should be as follows?:
       vdata.bestsol[0] = 1
       vdata.bestsol[1] = 0
       vdata.bestsol[2] = 2
       vdata.bestsol[3] = 0.
       Note that you should write "vdata->bestsol[j]" in your subroutines.
     */
-    // DEBUG
-    printf("Agent count %d\n", gapdata.m);
-    for (int i = 0; i < gapdata.m; ++i) {
-        for (int j = 0; j < gapdata.n ; ++j) {
-            printf("job%d -> cost: %d, resource: %d\n", gapdata.n, gapdata.c[i][j], gapdata.a[i][j] );
+    // Case1. Kuso zako Greedy algorithm
+    /**
+     * For each job, get agent number instance having min cost and not Exceeding capacity.
+     */
+
+    // 0. prepare val.
+    // List of remaining resources of each agent
+    int remain_resources_of_agent[gapdata.m];
+    // List of index of agent sorted by cost (Reset by each job loop)
+    int sorted_agent_index_list[gapdata.m];
+    // set default value
+    // remaining resources -> same as gapdata.b
+    for (int i = 0; i < gapdata.m; ++i) { remain_resources_of_agent[i] = gapdata.b[i]; }
+
+    // TODO: divide functions and use better sort and algorithm(need to use malloc and copy)
+    for (int j = 0; j < gapdata.n; ++j) {
+        // Initialize sorted index list ->(first, use index of agents)
+        for (int i = 0; i < gapdata.m; ++i) { sorted_agent_index_list[i] = i; }
+
+        // 1. sort agent_index_list by bubble sort
+        int min_agent_index = 0;
+        for (int i = 0; i < gapdata.m; ++i) {
+            if (gapdata.c[i][j] < gapdata.c[min_agent_index][j]) {
+                swap(&sorted_agent_index_list[i], &sorted_agent_index_list[min_agent_index]);
+                min_agent_index = i;
+            }
         }
-    }
-    for (int j = 0; j < gapdata.n ; ++j) {
-        printf("hoge-%d\n", vdata.bestsol[j]);
+
+        // 2. find bestsol if available
+        for (int i = 0; i < gapdata.m; ++i) {
+            int agent_index = sorted_agent_index_list[i];
+            // check resources and set bestsol
+            if (gapdata.a[agent_index][j] <= remain_resources_of_agent[agent_index]) {
+                vdata.bestsol[j] = agent_index;
+                // Cut back remained_resources of this agent.
+                remain_resources_of_agent[agent_index] -= gapdata.a[agent_index][j];
+                break;
+            }
+        }
     }
 
     // CODES BELOW SHOULD'T CHANGE BECAUSE OF ONLY DELETING DATA AND MEMORY OF VARIABLES.
